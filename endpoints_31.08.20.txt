@@ -1,0 +1,1017 @@
+﻿Estructura de API
+Nota: En la mayoria de los casos las entradas vienen en un array que contiene un objeto. Cuando las entradas son array hacer la implentación para que el API sea capaz de soportar multiples objetos en una sola llamada.
+Adicional se debe tener presente que se tendra una opción para ir actualizando el espacio de trabajo del usuario por lo tanto se manejará una lista de estado con la intensión de definir que accion sera la realizada por parte del API
+El estado serán: (new, update, delete), en la respuesta el estado debe ser (created, modified o removed) respectivamente.
+
+
+Login:
+  Método: POST
+  Url: "/login"
+  Datos de entrada:
+    {
+      "email": "ejemplo@emial",
+      "password": "valor"
+    }
+  Datos de Salida:
+    [
+      {
+        success: true,
+        response: {
+          "id": "1",
+          "name": "pedro perez",
+          "idPerfil": "1"
+          "idSucursal": ""
+        }
+      }
+    ]
+
+    Mensajes de errores posibles:
+      [{ "success": false, "number_error": 1, "error": "usuario o contraseña invalida" }]
+      [{ "success": false, "number_error": 2, "error": "usuario no existe" }]
+
+
+Registro de usuario:
+  Método: POST
+  Url: "/registro"
+  Datos de entrada:
+    {
+      "name" "nombre",
+      "email": "ejemplo@emial",
+      "password": "valor",
+      "isAdmin": 1
+    }
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": {
+          "id": "1",
+          "name": "pedro perez",
+          "idPerfil": "1"
+          "idSucursal": ""
+        }
+      }
+    ]
+
+    Mensajes de errores posibles:
+      [{ "success": false, "number_error": 1, "error": "Email ya registrado" }]
+
+
+Modificar de usuario:
+  Método: PUT
+  Url: "/registro"
+  Datos de entrada:
+    {
+      "id": "1"
+      "name" "nombre",
+      "email": "ejemplo@emial",
+      "password": "valor",
+      "isAdmin": 1
+    }
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": {
+          "id": "1",
+          "name": "pedro perez",
+          "idPerfil": "1"
+          "idSucursal": ""
+        }
+      }
+    ]
+
+Crear Sucursal
+Método: POST
+Url: "/sucursal"
+Datos de entrada:
+  [{
+    "idusuario": "1",
+    "proyecto": "nombre_del_proyecto/sucursal"
+  }]
+  Datos de Salida:
+    [{
+      "idsucursal": 1,
+      "success": true
+    }]
+
+Crear Fuente de Ruido: El estado puede ser: (new, update, delete), en la respuesta el estado debe ser (created, modified o removed)
+
+  Método: POST
+  Url: "/fuente"
+  Datos de entrada:
+    [{
+      "idSucursal": "1"
+      "idusuario": "1"
+      "coord_norte" -53.097603,
+      "coord_este": -70.882761,
+      "lugar": "San Cristobal",
+      "nps": 50,
+      "distancia_inicial": 54,
+      "limite_circunferencia": 100,
+      "altura": 12,
+      "estado": "new"
+    }]
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idFuente": 1,
+            "estado": "created"
+          }
+        ]
+      }
+    ]
+
+
+
+Crear Receptor de Ruido: El estado puede ser: (new, update, delete), en la respuesta el estado debe ser (created, modified o removed)
+  Método: POST
+  Url: "/receptor"
+  Datos de entrada:
+    [
+      {
+        "idFuente": "1"
+        "nombre" "receptor a",
+        "numeroreceptor": "1",
+        "calle": "calle",
+        "numero": 54,
+        "comuna": "100",
+        "datum": "12"
+        "huso": "huso",
+        "coord_norte": -53.097603,
+        "coord_este": -70.882761,
+        "zona_emplazamiento": "",
+        "no_certificado", "no",
+        "zonidificacion": "I",
+        "distancia_fuente": 24.3,
+        "distancia_circunferencia": 21.3,
+        "dBA": 23,
+        "altura": 3,
+        "estado": 'update'
+      },
+      {
+        "idFuente": "1"
+        "nombre" "receptor b",
+        "numeroreceptor": "2",
+        "calle": "calle",
+        "numero": 54,
+        "comuna": "100",
+        "datum": "12"
+        "huso": "huso",
+        "coord_norte": -53.097603,
+        "coord_este": -70.882761,
+        "zona_emplazamiento": "",
+        "no_certificado", "no",
+        "zonidificacion": "I",
+        "distancia_fuente": 24.3,
+        "distancia_circunferencia": 21.3,
+        "dBA": 23,
+        "altura": 3,
+        "estado": "new"
+      }
+    ]
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idReceptor": 1,
+            "estado": 'modified',
+            "numeroreceptor": 1
+          },
+          {
+            "idReceptor": 2,
+            "estado": 'created',
+            "numeroreceptor": 2
+          }
+        ]
+      }
+    ]
+
+Crear Imagen: El estado puede ser: (new, update, delete), en la respuesta el estado debe ser (created, modified o removed)
+  Método: POST
+  Url: "/imagen1"
+  NOTA: El campo "url" no se envia desde el front, esta como ejemplo en la entrada con la intensión de que se cree en el proceso de guardado.
+  Datos de entrada:
+    [
+      {
+        "idFuente": 1,
+        "idReceptor": 1,
+        "imagen": "imagen en formato base64",
+        "estado": "new"
+      }
+    ]
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idImagen": 1
+            "idFuente": 1,
+            "idReceptor": 1,
+            "url": dominio/imagen.jpg,
+            "estado": "created"
+          }
+        ]
+      }
+    ]
+
+
+Modificar Imagen: El estado puede ser: (new, update, delete), en la respuesta el estado debe ser (created, modified o removed)
+  Método: PUT
+  Url: "/imagen1"
+  NOTA: El campo "url" no se envia desde el front, esta como ejemplo en la entrada con la intensión de que se cree en el proceso de guardado.
+  Datos de entrada:
+    [
+      {
+        "idImagen": 1,
+        "idFuente": 1,
+        "idReceptor": 1,
+        "imagen": "imagen en formato base64",
+        "estado": "update"
+      }
+    ]
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idImagen": 1
+            "idFuente": 1,
+            "idReceptor": 1,
+            "url": dominio/imagen.jpg,
+            "estado": "modified"
+          }
+        ]
+      }
+    ]
+
+Eliminar Imagen:
+  Método: Delete
+  Url: "/imagen1/{idImagen}"
+  Datos de entrada: idImagen
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          { "idImagen": 1, "delete": true }
+        ]
+      }
+    ]
+
+Leer Imagen:
+  Método: GET
+  Url: "/imagen1/{idImagen}"
+  Datos de entrada: idImagen
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idImagen": 1,
+            "idFuente": 1,
+            "idReceptor": 1,
+            "imagen": "imagen en formato base64",
+            "url": "Url absoluta de la imagen que se debe crear usando el formato base64"
+          }
+        ]
+      }
+    ]
+
+Leer Formula:
+  Método: GET
+  Url: "/formula/{idFormula}"
+  Datos de entrada: idFormula
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idFormula": 1,
+            "formula": 1,
+            "orden": 1,
+          }
+        ]
+      }
+    ]
+
+Leer Todas las Formulas:
+  Método: GET
+  Url: "/formula/all"
+  Datos de entrada:
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idFormula": 1,
+            "formula": "formula",
+            "orden": 1,
+          },
+          {
+            "idFormula": 2,
+            "formula": "formula",
+            "orden": 2,
+          }
+        ]
+      }
+    ]
+
+
+Crear Barrera: El estado puede ser: (new, update, delete), en la respuesta el estado debe ser (created, modified o removed)
+  Método: POST
+  Url: "/barrera"
+  Datos de entrada:
+    [
+      {
+        "idFuente": 1,
+        "coord_norte_inicio": -53.097603,
+        "coord_este_inicio": -70.882761,
+        "coord_norte_fin": -53.097603,
+        "coord_este_fin": -70.882761,
+        "altura": 3,
+        "estado": "new"
+      },
+      {
+        "idBarrera": 1, // Ojo en este punto estamos enviadon el idBarrera ya que este objeto pudo ser creado previamente.
+        "idFuente": 1,
+        "coord_norte_inicio": -53.097603,
+        "coord_este_inicio": -70.882761,
+        "coord_norte_fin": -53.097603,
+        "coord_este_fin": -70.882761,
+        "altura": 3,
+        "estado": "update"
+      }
+    ]
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idBarrera": 1,
+            "idFuente": 1,
+            "estado" "created"
+          },
+          {
+            "idBarrera": 2,
+            "idFuente": 1,
+            "estado": "modified"
+          }
+        ]
+      }
+    ]
+
+Eliminar Barrera:
+  Método: DELETE
+  Url: "/barrera/{idBarrera}"
+  Datos de entrada: idBarrera
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idBarrera": 1,
+            "delete": true
+          }
+        ]
+      }
+    ]
+
+
+Obtener Barreras: Este punto puede que cambie a futuro, y el la busqueda se realice por el id del proyecto.
+  Método: GET
+  Url: "/barrera/all/{idFuente}"
+  Datos de entrada: idFuente
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idBarrera": 1,
+            "idFuente": 1,
+            "coord_norte_inicio": -53.097603,
+            "coord_este_inicio": -70.882761,
+            "coord_norte_fin": -53.097603,
+            "coord_este_fin": -70.882761,
+            "altura": 3
+          },
+          {
+            "idBarrera": 2,
+            "idFuente": 1,
+            "coord_norte_inicio": -53.097603,
+            "coord_este_inicio": -70.882761,
+            "coord_norte_fin": -53.097603,
+            "coord_este_fin": -70.882761,
+            "altura": 3
+          }
+        ]
+      }
+    ]
+
+
+Obtener Intersección:
+  Método: GET
+  Url: "/interseccion/{idBarrera}"
+  Datos de entrada: idBarrera
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idPuntoInterseccionBarrera": 1,
+            "idBarrera": 1,
+            "idReceptor": 2,
+            "coord_norte": -70.882761,
+            "coord_este": -53.097603
+          },
+          {
+          "idPuntoInterseccionBarrera": 2,
+          "idBarrera": 1,
+          "idReceptor": 3,
+          "coord_norte": -70.882761,
+          "coord_este": -53.097603
+          }
+        ]
+      }
+    ]
+
+
+Crear Intersección:
+  Método: POST
+  Url: "/interseccion"
+  Datos de entrada:
+    [
+      {
+        "idBarrera": 1,
+        "idReceptor": 2,
+        "coord_norte": -70.882761,
+        "coord_este": -53.097603,
+        "estado": "new"
+      },
+      {
+        "idBarrera": 1,
+        "idReceptor": 3,
+        "coord_norte": -70.882761,
+        "coord_este": -53.097603,
+        "estado": "update"
+      }
+    ]
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idPuntoInterseccionBarrera": 1,
+            "idBarrera": 1,
+            "idReceptor": 2,
+            "estado": "created"
+          },
+          {
+          "idPuntoInterseccionBarrera": 2,
+          "idBarrera": 1,
+          "idReceptor": 3,
+          "estado": "modified"
+          }
+        ]
+      }
+    ]
+
+Modificar Intersección:
+  Método: PUT
+  Url: "/interseccion"
+  Datos de entrada:
+    [
+      {
+        "idPuntoInterseccionBarrera": 1,
+        "idBarrera": 1,
+        "idReceptor": 2,
+        "coord_norte": -70.882761,
+        "coord_este": -53.097603
+      },
+      {
+        "idPuntoInterseccionBarrera": 2,
+        "idBarrera": 1,
+        "idReceptor": 3,
+        "coord_norte": -70.882761,
+        "coord_este": -53.097603
+      }
+    ]
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idPuntoInterseccionBarrera": 1,
+            "idBarrera": 1,
+            "idReceptor": 2
+          },
+          {
+            "idPuntoInterseccionBarrera": 2,
+            "idBarrera": 1,
+            "idReceptor": 3
+          }
+        ]
+      }
+    ]
+
+
+Eliminar Intersección:
+  Método: DELETE
+  Url: "/interseccion/{idPuntoInterseccionBarrera}"
+  Datos de entrada: idPuntoInterseccionBarrera
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idPuntoInterseccionBarrera": 1,
+            "delete": true,
+          }
+        ]
+      }
+    ]
+
+Obtener Valores Predefinidos:
+  Método: GET
+  Url: "/predefinidos/all"
+  Datos de entrada:
+  Datos de Salida:
+    [
+      {
+        "success": true,
+        "response": [
+          {
+            "idValoresPredeinidos": 1,
+            "nps": "50",
+            "distancia_inicial": "120"
+          },
+          {
+            "idValoresPredeinidos": 2,
+            "nps": "150",
+            "distancia_inicial": "130"
+          },
+        ]
+      }
+    ]
+
+
+Obtener proyetos del usuario:
+Método: GET
+Url: "proyecto/usuario/{idusuario}"
+Datos de Salida:
+  [
+    {
+      idProyecto: 1,
+      nombre_del_proyecto: "proyecto A"
+    },
+    {
+      idProyecto: 2,
+      nombre_del_proyecto: "proyecto B"
+    }
+  ]
+
+Guardar/Actualizar espacio de trabajo del usuario:
+Este web services se usara con la intensión de mantener guardado todo el espacio de trabajo del usuario.
+Método: POST
+Url: "plano/usuario"
+Datos de Entrada:
+  [
+    fuentes: [
+      {
+        "idFuente": 1,
+        "idusuario": "1"
+        "coord_norte" -53.097603,
+        "coord_este": -70.882761,
+        "lugar": "San Cristobal",
+        "nps": 50,
+        "distancia_inicial": 54,
+        "limite_circunferencia": 100,
+        "altura": 12,
+        "estado": "new"
+      },
+      {
+        "idFuente": 2,
+        "idusuario": "1"
+        "coord_norte" -53.097603,
+        "coord_este": -70.882761,
+        "lugar": "San Cristobal",
+        "nps": 50,
+        "distancia_inicial": 54,
+        "limite_circunferencia": 100,
+        "altura": 12,
+        "estado": "update"
+      },
+    ],
+    receptores: [
+      {
+        "idReceptor": 1,
+        "idFuente": "1"
+        "nombre" "receptor a",
+        "numeroreceptor": "1",
+        "calle": "calle",
+        "numero": 54,
+        "comuna": "100",
+        "datum": "12"
+        "huso": "huso",
+        "coord_norte": -53.097603,
+        "coord_este": -70.882761,
+        "zona_emplazamiento": "",
+        "no_certificado", "no",
+        "zonidificacion": "I",
+        "distancia_fuente": 24.3,
+        "distancia_circunferencia": 21.3,
+        "dBA": 23,
+        "altura": 3,
+        "estado": "created"
+      },
+      {
+        "idReceptor": 1,
+        "idFuente": "1"
+        "nombre" "receptor a",
+        "numeroreceptor": "1",
+        "calle": "calle",
+        "numero": 54,
+        "comuna": "100",
+        "datum": "12"
+        "huso": "huso",
+        "coord_norte": -53.097603,
+        "coord_este": -70.882761,
+        "zona_emplazamiento": "",
+        "no_certificado", "no",
+        "zonidificacion": "I",
+        "distancia_fuente": 24.3,
+        "distancia_circunferencia": 21.3,
+        "dBA": 23,
+        "altura": 3,
+        "estado": "modified"
+      },
+    ],
+    "barreras": [
+      {
+        "idBarrera": 1,
+        "idFuente": 1,
+        "coord_norte_inicio": -53.097603,
+        "coord_este_inicio": -70.882761,
+        "coord_norte_fin": -53.097603,
+        "coord_este_fin": -70.882761,
+        "altura": 3,
+        "estado": "new"
+      },
+      {
+        "idBarrera": 2,
+        "idFuente": 1,
+        "coord_norte_inicio": -53.097603,
+        "coord_este_inicio": -70.882761,
+        "coord_norte_fin": -53.097603,
+        "coord_este_fin": -70.882761,
+        "altura": 3,
+        "estado": "update"
+      }
+    ],
+    "intersecciones": [
+      {
+        "idPuntoInterseccionBarrera": 1,
+        "idBarrera": 1,
+        "idReceptor": 2,
+        "coord_norte": -70.882761,
+        "coord_este": -53.097603,
+        "estado": "created"
+      },
+      {
+      "idPuntoInterseccionBarrera": 2,
+      "idBarrera": 1,
+      "idReceptor": 3,
+      "coord_norte": -70.882761,
+      "coord_este": -53.097603,
+      "estado": "modified"
+      }
+    ],
+    imagenes: [
+      {
+        "idImagen": 1
+        "idFuente": 1,
+        "idReceptor": 1,
+        "url": dominio/imagen.jpg,
+        "estado": "update"
+      },
+      {
+        "idImagen": 1
+        "idFuente": 1,
+        "idReceptor": 1,
+        "url": dominio/imagen.jpg,
+        "estado": "created"
+      }
+    ]
+
+Datos de Salida:
+[
+  fuentes: [
+    {
+      "idFuente": 1,
+      "idusuario": "1"
+      "estado": "new"
+    },
+    {
+      "idFuente": 2,
+      "idusuario": "1"
+      "estado": "update"
+    },
+  ],
+  receptores: [
+    {
+      "idReceptor": 1,
+      "idFuente": "1"
+      "estado": "created"
+    },
+    {
+      "idReceptor": 1,
+      "idFuente": "1"
+      "estado": "modified"
+    },
+  ],
+  "barreras": [
+    {
+      "idBarrera": 1,
+      "idFuente": 1,
+      "estado": "new"
+    },
+    {
+      "idBarrera": 2,
+      "idFuente": 1,
+      "estado": "update"
+    }
+  ],
+  "intersecciones": [
+    {
+      "idPuntoInterseccionBarrera": 1,
+      "idBarrera": 1,
+      "idReceptor": 2,
+      "estado": "created"
+    },
+    {
+    "idPuntoInterseccionBarrera": 2,
+    "idBarrera": 1,
+    "idReceptor": 3,
+    "estado": "modified"
+    }
+  ],
+  imagenes: [
+    {
+      "idImagen": 1
+      "idFuente": 1,
+      "idReceptor": 1,
+      "url": dominio/imagen.jpg,
+      "estado": "update"
+    },
+    {
+      "idImagen": 1
+      "idFuente": 1,
+      "idReceptor": 1,
+      "url": dominio/imagen.jpg,
+      "estado": "created"
+    }
+  ]
+
+Obtener Data Completa desde usuario:
+  Método: GET
+  Url: "plano/usuario/{idusuario}"
+  Datos de entrada: idusuario.
+  Datos de Salida:
+    [
+      fuentes: [
+        {
+          "idFuente": 1,
+          "idusuario": "1"
+          "coord_norte" -53.097603,
+          "coord_este": -70.882761,
+          "lugar": "San Cristobal",
+          "nps": 50,
+          "distancia_inicial": 54,
+          "limite_circunferencia": 100,
+          "altura": 12
+        },
+        {
+          "idFuente": 2,
+          "idusuario": "1"
+          "coord_norte" -53.097603,
+          "coord_este": -70.882761,
+          "lugar": "San Cristobal",
+          "nps": 50,
+          "distancia_inicial": 54,
+          "limite_circunferencia": 100,
+          "altura": 12
+        },
+      ],
+      receptores: [
+        {
+          "idReceptor": 1,
+          "idFuente": "1"
+          "nombre" "receptor a",
+          "numeroreceptor": "1",
+          "calle": "calle",
+          "numero": 54,
+          "comuna": "100",
+          "datum": "12"
+          "huso": "huso",
+          "coord_norte": -53.097603,
+          "coord_este": -70.882761,
+          "zona_emplazamiento": "",
+          "no_certificado", "no",
+          "zonidificacion": "I",
+          "distancia_fuente": 24.3,
+          "distancia_circunferencia": 21.3,
+          "dBA": 23,
+          "altura": 3
+        },
+        {
+          "idReceptor": 1,
+          "idFuente": "1"
+          "nombre" "receptor a",
+          "numeroreceptor": "1",
+          "calle": "calle",
+          "numero": 54,
+          "comuna": "100",
+          "datum": "12"
+          "huso": "huso",
+          "coord_norte": -53.097603,
+          "coord_este": -70.882761,
+          "zona_emplazamiento": "",
+          "no_certificado", "no",
+          "zonidificacion": "I",
+          "distancia_fuente": 24.3,
+          "distancia_circunferencia": 21.3,
+          "dBA": 23,
+          "altura": 3
+        },
+      ],
+      "barreras": [
+        {
+          "idBarrera": 1,
+          "idFuente": 1,
+          "coord_norte_inicio": -53.097603,
+          "coord_este_inicio": -70.882761,
+          "coord_norte_fin": -53.097603,
+          "coord_este_fin": -70.882761,
+          "altura": 3
+        },
+        {
+          "idBarrera": 2,
+          "idFuente": 1,
+          "coord_norte_inicio": -53.097603,
+          "coord_este_inicio": -70.882761,
+          "coord_norte_fin": -53.097603,
+          "coord_este_fin": -70.882761,
+          "altura": 3
+        }
+      ],
+      "intersecciones": [
+        {
+          "idPuntoInterseccionBarrera": 1,
+          "idBarrera": 1,
+          "idReceptor": 2,
+          "coord_norte": -70.882761,
+          "coord_este": -53.097603
+        },
+        {
+        "idPuntoInterseccionBarrera": 2,
+        "idBarrera": 1,
+        "idReceptor": 3,
+        "coord_norte": -70.882761,
+        "coord_este": -53.097603
+        }
+      ],
+      imagenes: [
+        {
+          "idImagen": 1
+          "idFuente": 1,
+          "idReceptor": 1,
+          "url": dominio/imagen.jpg
+        }
+      ]
+    ]
+
+
+
+Obtener Data Completa desde Fuente:
+  Método: GET
+  Url: "plano/fuente/{idFuente}"
+  Datos de entrada: idFuente.
+  Datos de Salida:
+    [
+      fuentes: [
+        {
+          "idFuente": 1,
+          "idusuario": "1"
+          "coord_norte" -53.097603,
+          "coord_este": -70.882761,
+          "lugar": "San Cristobal",
+          "nps": 50,
+          "distancia_inicial": 54,
+          "limite_circunferencia": 100,
+          "altura": 12
+        }
+      ],
+      receptores: [
+        {
+          "idReceptor": 1,
+          "idFuente": "1"
+          "nombre" "receptor a",
+          "numeroreceptor": "1",
+          "calle": "calle",
+          "numero": 54,
+          "comuna": "100",
+          "datum": "12"
+          "huso": "huso",
+          "coord_norte": -53.097603,
+          "coord_este": -70.882761,
+          "zona_emplazamiento": "",
+          "no_certificado", "no",
+          "zonidificacion": "I",
+          "distancia_fuente": 24.3,
+          "distancia_circunferencia": 21.3,
+          "dBA": 23,
+          "altura": 3
+        },
+        {
+          "idReceptor": 1,
+          "idFuente": "1"
+          "nombre" "receptor a",
+          "numeroreceptor": "1",
+          "calle": "calle",
+          "numero": 54,
+          "comuna": "100",
+          "datum": "12"
+          "huso": "huso",
+          "coord_norte": -53.097603,
+          "coord_este": -70.882761,
+          "zona_emplazamiento": "",
+          "no_certificado", "no",
+          "zonidificacion": "I",
+          "distancia_fuente": 24.3,
+          "distancia_circunferencia": 21.3,
+          "dBA": 23,
+          "altura": 3
+        },
+      ],
+      "barreras": [
+        {
+          "idBarrera": 1,
+          "idFuente": 1,
+          "coord_norte_inicio": -53.097603,
+          "coord_este_inicio": -70.882761,
+          "coord_norte_fin": -53.097603,
+          "coord_este_fin": -70.882761,
+          "altura": 3
+        },
+        {
+          "idBarrera": 2,
+          "idFuente": 1,
+          "coord_norte_inicio": -53.097603,
+          "coord_este_inicio": -70.882761,
+          "coord_norte_fin": -53.097603,
+          "coord_este_fin": -70.882761,
+          "altura": 3
+        }
+      ],
+      "intersecciones": [
+        {
+          "idPuntoInterseccionBarrera": 1,
+          "idBarrera": 1,
+          "idReceptor": 2,
+          "coord_norte": -70.882761,
+          "coord_este": -53.097603
+        },
+        {
+        "idPuntoInterseccionBarrera": 2,
+        "idBarrera": 1,
+        "idReceptor": 3,
+        "coord_norte": -70.882761,
+        "coord_este": -53.097603
+        }
+      ],
+      imagenes: [
+        {
+          "idImagen": 1
+          "idFuente": 1,
+          "idReceptor": 1,
+          "url": dominio/imagen.jpg
+        }
+      ]
+    ]

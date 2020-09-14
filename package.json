@@ -1,0 +1,39 @@
+{
+  "name": "sequilize-autogenerate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "automate": "sequelize-automate -t js -h localhost -d db_ruidocx -u root -p 12345678As -P 3306  -e mysql -o models",
+    "generateModels": "sequelize-automate -c sequelize-automate.config.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CayetanoHerreraLuisRicardo/Noise-Measurement-API.git"
+  },
+  "keywords": [
+    "API",
+    "NOISE",
+    "MEASUREMENT",
+    "NODEJS",
+    "SEQUELIZE",
+    "MYSQL",
+    "NODEMAILER",
+    "GMAIL"
+  ],
+  "author": "richych92gmail.com",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "googleapis": "^59.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.27.0",
+    "mysql2": "^2.1.0",
+    "nodemailer": "^6.4.11",
+    "sequelize": "^6.3.4",
+    "sequelize-automate": "^1.2.2"
+  }
+}
